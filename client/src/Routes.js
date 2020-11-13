@@ -1,22 +1,12 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Layout from "@/pages/Layout";
-import Page1 from "@/pages/Page1";
+import TestList from "@/pages/TestList";
 
 Vue.use(Router);
 
 export default new Router({
     mode: 'history',
     routes: [
-        {
-            path: '/test',
-            component: Layout,
-            children: [
-                {
-                    path: 'home',
-                    component: Page1
-                }
-            ]
-        },
+        { path: '/', component: TestList },
     ],
 });
