@@ -1,5 +1,6 @@
 package kr.co.udid.ciderpay.controller;
 
+import kr.co.udid.ciderpay.model.PaymentFeedback;
 import kr.co.udid.ciderpay.model.PaymentRequest;
 import kr.co.udid.ciderpay.model.data.PaymentRequestFail;
 import kr.co.udid.ciderpay.model.data.PaymentRequestSuccess;
@@ -49,8 +50,10 @@ public class PaymentCt {
     }
 
     @PostMapping("/p/request")
-    public void payRequest(@RequestBody PaymentRequest request)
+    public PaymentFeedback payRequest(@RequestBody PaymentRequest request)
     {
-        paymentSv.request(request);
+        PaymentFeedback result = paymentSv.request(request);
+
+        return  result;
     }
 }

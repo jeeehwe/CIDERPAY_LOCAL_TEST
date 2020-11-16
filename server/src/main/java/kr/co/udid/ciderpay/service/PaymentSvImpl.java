@@ -27,20 +27,16 @@ public class PaymentSvImpl implements PaymentSv {
         request.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         request.setSellerName("(주)쏘다");
 
-        if (request.getMemberID() == null
-            || (request.getPrice() < 1000)
-            || request.getGoodName() == null
-            || request.getMobile() == null
-        ) {
-
-            request.setStatus(Status.FAIL);
-            request.setPaymentState(PaymentState.FAIL);
-
-        } else {
-
+        if ( request.getMemberID() != null && request.getPrice() >= 1000
+            && request.getGoodName() != null && request.getMobile() != null )
+        {
             request.setStatus(Status.SUCCESS);
             request.setPayUrl(makeRandom());
             request.setPaymentState(PaymentState.PROCESS);
+        }
+        else {
+            request.setStatus(Status.FAIL);
+            request.setPaymentState(PaymentState.FAIL);
         }
 
         PaymentRequest result = requestRepository.save(request);
@@ -86,7 +82,7 @@ public class PaymentSvImpl implements PaymentSv {
 
 
     @Override
-    public void request(PaymentRequest request) {
+    public PaymentFeedback request(PaymentRequest request) {
         PaymentFeedback feedback = new PaymentFeedback();
 
         feedback.setMemberID(request.getMemberID());
@@ -104,12 +100,14 @@ public class PaymentSvImpl implements PaymentSv {
         feedback.setCcname("신한카드");
         feedback.setCsturl(makeRandom());
 
-        feedbackRepository.save(feedback);
+        PaymentFeedback result = feedbackRepository.save(feedback);
 
         request.setPaymentState(PaymentState.COMPLETE);
         request.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
         requestRepository.save(request);
+
+        return result;
     }
 
 
