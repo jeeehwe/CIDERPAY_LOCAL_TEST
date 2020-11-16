@@ -1,11 +1,11 @@
 package kr.co.udid.ciderpay.model;
 
 import kr.co.udid.ciderpay.model.enums.SmsUse;
-import kr.co.udid.ciderpay.model.enums.Status;
 import kr.co.udid.ciderpay.model.enums.PaymentState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 
@@ -13,23 +13,24 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@ToString
 @Table(name="payment_request")
 public class PaymentRequest {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id", nullable = false) private Long requestId;
 
-    @Column(name = "member_id") private String memberID;
+    @Column(name = "member_id", nullable = false) private String memberID;
 
-    @Column(name = "price") private int price;
+    @Column(name = "price", nullable = false) private int price;
 
     @Column(name = "tax_price") private int taxPrice;
 
     @Column(name = "tax_free_price") private int taxFreePrice;
 
-    @Column(name = "good_name") private String goodName;
+    @Column(name = "good_name", nullable = false) private String goodName;
 
-    @Column(name = "mobile")  private String mobile;
+    @Column(name = "mobile", nullable = false)  private String mobile;
 
     @Column(name = "custom_name")  private String customName;
 
@@ -55,12 +56,12 @@ public class PaymentRequest {
 
     @Column(name = "create_date") private String createDate;
 
-    @Column(name = "status") private Status status;
-
     @Column(name = "pay_url") private String payUrl;
 
     @Column(name = "seller_name") private String sellerName;
 
     @Column(name = "payment_state") private PaymentState paymentState;
+
+    @Column(name = "pay_unique_no") private String payUniqueNo;
 
 }

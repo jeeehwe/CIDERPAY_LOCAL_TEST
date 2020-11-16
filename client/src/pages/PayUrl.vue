@@ -6,11 +6,12 @@
                 상품명 : {{ paymentRequest.goodName }}<br/>
                 판매자 : {{ paymentRequest.sellerName }}<br/>
                 연락처 : {{ paymentRequest.mobile }}<br/>
-                결제금액 : {{ paymentRequest.price }}
+                결제금액 : {{ paymentRequest.price }}<br/>
+                결제 상태 : <span style="color: red">{{ paymentRequest.paymentState }}</span>
             </div><br/>
             <div class="space">카드결제</div><br/>
             <button v-if="isRequest" class="btn btn-success" @click="payRequest">결제하기</button>
-            <button v-if="!isRequest" class="btn btn-dark">결제완료</button>{{' '}}
+            <button v-if="!isRequest" class="btn btn-danger" @click="payCancel">결제취소</button>{{' '}}
             <button v-if="!isRequest" class="btn btn-outline-dark" @click="goBack">되돌아가기</button>
         </div>
 
@@ -37,7 +38,7 @@ export default {
                 if (data !== "") {
                     this.isCorrect = true;
                     this.paymentRequest = data;
-                    this.isRequest = (data.paymentState === 'PROCESS');
+                    this.isRequest = (data.paymentState === 'PROGRESS');
                 } else
                     this.isCorrect = false;
             })
@@ -53,6 +54,16 @@ export default {
         },
         goBack() {
             this.$router.push('/')
+        },
+        payCancel() {
+            axios
+                .post(`http://localhost:8080/oapi/payment/request/cancel`, {
+                    memberID: this.paymentRequest.memberID,
+                    payUniqueNo: this.paymentRequest.payUniqueNo
+                })
+                .then(() => {
+                    //this.paymentRequest = data;
+                })
         }
     }
 }
@@ -82,7 +93,7 @@ export default {
 .main > :nth-child(2) {
     height: 200px;
     text-align: left;
-    padding-top: 50px;
+    padding-top: 40px;
     padding-bottom: 100px;
     padding-left: 10px;
 }

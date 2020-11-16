@@ -12,8 +12,6 @@ public interface PaymentSv {
 
     PaymentRequest getByPayUrl (String payUrl);
 
-    String makeRandom ();
-
     PaymentFeedback request (PaymentRequest request);
 
 }

@@ -5,13 +5,11 @@ import kr.co.udid.ciderpay.model.enums.PaymentState;
 import kr.co.udid.ciderpay.repository.PaymentFeedbackRepository;
 import kr.co.udid.ciderpay.repository.PaymentRequestRepository;
 import kr.co.udid.ciderpay.model.PaymentRequest;
-import kr.co.udid.ciderpay.model.enums.Status;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.PropertyValueException;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -20,6 +18,7 @@ import java.util.List;
 public class PaymentSvImpl implements PaymentSv {
     final private PaymentRequestRepository requestRepository;
     final private PaymentFeedbackRepository feedbackRepository;
+    final private Util util;
 
     @Override
     public PaymentRequest insertTestData(PaymentRequest request) {
@@ -27,19 +26,20 @@ public class PaymentSvImpl implements PaymentSv {
         request.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         request.setSellerName("(주)쏘다");
 
-        if ( request.getMemberID() != null && request.getPrice() >= 1000
-            && request.getGoodName() != null && request.getMobile() != null )
-        {
-            request.setStatus(Status.SUCCESS);
-            request.setPayUrl(makeRandom());
-            request.setPaymentState(PaymentState.PROCESS);
-        }
-        else {
-            request.setStatus(Status.FAIL);
-            request.setPaymentState(PaymentState.FAIL);
-        }
+        PaymentRequest result = new PaymentRequest();
 
-        PaymentRequest result = requestRepository.save(request);
+        try
+        {
+            request.setPayUrl(util.makeRandom());
+            request.setPaymentState(PaymentState.PROGRESS);
+            request.setPayUniqueNo(util.makeRandom()+util.makeRandom());
+
+            result = requestRepository.save(request);
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
 
         return result;
     }
@@ -57,31 +57,6 @@ public class PaymentSvImpl implements PaymentSv {
     }
 
     @Override
-    public String makeRandom() {
-        String randomPayUrl = makeShuffle() + makeShuffle() + makeShuffle() + makeShuffle() + makeShuffle() + makeShuffle() + makeShuffle() + makeShuffle();
-
-        return randomPayUrl;
-    }
-
-    public String makeShuffle() {
-        List<String> makeShuffle = Arrays.asList(
-                "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "n",
-                "m", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
-                "1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
-
-        Collections.shuffle(makeShuffle);
-
-        return makeShuffle.get(0);
-    }
-
-    public String makeRandomNum() {
-        List<String> makeShuffle = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
-
-        return makeShuffle.get(0) + makeShuffle.get(1) + makeShuffle.get(2) + makeShuffle.get(3) + makeShuffle.get(4) + makeShuffle.get(5) + makeShuffle.get(6);
-    }
-
-
-    @Override
     public PaymentFeedback request(PaymentRequest request) {
         PaymentFeedback feedback = new PaymentFeedback();
 
@@ -95,10 +70,10 @@ public class PaymentSvImpl implements PaymentSv {
         feedback.setFeedbackToken("feedbackToken");
         feedback.setPaymentState(PaymentState.COMPLETE);
         feedback.setPayType(1); //카드 결제
-        feedback.setOrderNo(makeRandomNum());
-        feedback.setApprovalNo(makeRandomNum());
+        feedback.setOrderNo(util.makeRandomNum());
+        feedback.setApprovalNo(util.makeRandomNum());
         feedback.setCcname("신한카드");
-        feedback.setCsturl(makeRandom());
+        feedback.setCsturl(util.makeRandom());
 
         PaymentFeedback result = feedbackRepository.save(feedback);
 
