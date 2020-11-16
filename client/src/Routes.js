@@ -1,12 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import TestList from "@/pages/TestList";
+import Index from "@/pages";
+
 
 Vue.use(Router);
 
 export default new Router({
     mode: 'history',
     routes: [
-        { path: '/', component: TestList },
+        { path: '/', component: Index.TestList },
+        { path: '/p/:payUrl', component: Index.PayUrl },
     ],
 });

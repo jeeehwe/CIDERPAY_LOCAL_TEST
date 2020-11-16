@@ -33,17 +33,15 @@ export default {
             perPage: 10,
             currentPage: 1,
             fields: [
-                { key: 'id', label: 'No'},
-                { key: 'goodName', label: '상품명'},
-                { key: 'price', label: '상품금액'},
-                { key: 'customName', label: '구매자명'},
-                { key: 'customNo', label: '구매자 휴대폰'},
-                { key: 'memberID', label: '결제자'}, //?
-                { key: 'status', label: '상태'},
-                { key: 'createDate', label: '요청일시'},
+                { key: 'requestId', label: 'id' },
+                { key: 'goodName', label: '상품명' },
+                { key: 'price', label: '상품금액' },
+                { key: 'memberID', label: '판매자아이디' },
+                { key: 'mobile', label: '구매자 휴대폰' },
+                { key: 'createDate', label: '요청일시' },
+                { key: 'paymentState', label: '결제 상태' },
             ],
             list: [],
-            //no, 결제내역 - 상품명, 상품금액, 구매자명, 구매자 휴대폰, /// 결제자, 상태, 요청일시
         }
     },
     created() {
@@ -54,7 +52,6 @@ export default {
             axios
                 .get("http://localhost:8080/list")
                 .then(({data}) => {
-                    console.log(data)
                     this.list = data;
                 })
         }
