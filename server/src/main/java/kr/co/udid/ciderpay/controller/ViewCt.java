@@ -1,6 +1,5 @@
 package kr.co.udid.ciderpay.controller;
 
-import kr.co.udid.ciderpay.model.PaymentFeedback;
 import kr.co.udid.ciderpay.model.PaymentRequest;
 import kr.co.udid.ciderpay.service.PaymentSv;
 import lombok.RequiredArgsConstructor;

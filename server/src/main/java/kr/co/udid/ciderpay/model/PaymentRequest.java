@@ -66,4 +66,6 @@ public class PaymentRequest {
 
     @Column(name = "pay_unique_no") private String payUniqueNo;
 
+    @Column(name = "status_code") private int statusCode;
+
 }

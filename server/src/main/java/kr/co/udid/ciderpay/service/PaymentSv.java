@@ -1,6 +1,5 @@
 package kr.co.udid.ciderpay.service;
 
-import kr.co.udid.ciderpay.model.PaymentFeedback;
 import kr.co.udid.ciderpay.model.PaymentRequest;
 import org.springframework.dao.DataIntegrityViolationException;
 

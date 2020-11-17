@@ -1,14 +1,23 @@
 package kr.co.udid.ciderpay.service;
 
-import kr.co.udid.ciderpay.model.PaymentFeedback;
 import kr.co.udid.ciderpay.model.enums.PaymentState;
 import kr.co.udid.ciderpay.repository.PaymentRequestRepository;
 import kr.co.udid.ciderpay.model.PaymentRequest;
 import lombok.RequiredArgsConstructor;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.message.BasicNameValuePair;
 import org.springframework.stereotype.Service;
-import sun.net.www.http.HttpClient;
+import org.apache.http.client.HttpClient;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -27,8 +36,8 @@ public class PaymentSvImpl implements PaymentSv {
         request.setPayUrl(util.makeRandom());
         request.setPaymentState(PaymentState.PROGRESS);
         request.setPayUniqueNo(util.makeRandom() + util.makeRandom());
-        request.setFeedbackurl("http://localhost:3000/feedback/"+util.makeRandom());
-        request.setReturnurl("http://localhost:3000/return/"+util.makeRandom());
+        request.setFeedbackurl("");
+        request.setReturnurl("/");
 
         PaymentRequest result = requestRepository.save(request);
 
@@ -68,29 +77,60 @@ public class PaymentSvImpl implements PaymentSv {
 
         if (!util.isEmptyStr(feedbackUrl))
         {
-            if (!feedbackUrl.startsWith ("http://") && !feedbackUrl.startsWith ("https://"))
+            if (!feedbackUrl.startsWith("http://") && !feedbackUrl.startsWith("https://"))
                 feedbackUrl = "http://" + feedbackUrl;
 
+            HttpClient client = HttpClientBuilder.create().build();
+            HttpPost post = new HttpPost(feedbackUrl);
 
+            post.setHeader ("User-Agent", "CiderpayLocalTest Java Module");
+
+            List<NameValuePair> urlParameters = new ArrayList<>();
+
+            urlParameters.add(new BasicNameValuePair("member_id", request.getMemberID()));
+            urlParameters.add(new BasicNameValuePair("feedback_token", "feedbackToken")); //피드백 토큰 -> 결제 취소 시 필요
+            urlParameters.add(new BasicNameValuePair("good_name", request.getGoodName()));
+            urlParameters.add(new BasicNameValuePair("price", String.valueOf(request.getPrice())));
+            urlParameters.add(new BasicNameValuePair("recv_phone", request.getMobile()));
+            urlParameters.add(new BasicNameValuePair("payment_state", request.getPaymentState().name()));
+            urlParameters.add(new BasicNameValuePair("pay_type", "1")); //결제 수단 - 카드 결제
+            urlParameters.add(new BasicNameValuePair("order_no", util.makeRandomNum())); //주문번호
+            urlParameters.add(new BasicNameValuePair("approval_no", util.makeRandomNum())); //승인번호
+            urlParameters.add(new BasicNameValuePair("ccname", "신한카드"));
+            urlParameters.add(new BasicNameValuePair("var1", request.getVar1()));
+            urlParameters.add(new BasicNameValuePair("var2", request.getVar2()));
+            urlParameters.add(new BasicNameValuePair("card_num", "1234-****-****-1234"));
+            urlParameters.add(new BasicNameValuePair("card_quota", "3")); //할부 개월
+            urlParameters.add(new BasicNameValuePair("csturl", util.makeRandom())); //영수증 url
+
+            post.setEntity(new UrlEncodedFormEntity(urlParameters, StandardCharsets.UTF_8));
+
+            try
+            {
+                HttpResponse response = client.execute(post);
+
+                request.setStatusCode(response.getStatusLine().getStatusCode());
+                requestRepository.save(request);
+
+                BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+
+                String responseStr;
+
+                StringBuilder result = new StringBuilder();
+
+                while ((responseStr = rd.readLine()) != null)
+                {
+                    result.append(responseStr).append("\n");
+                }
+
+                rd.close();
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
 
         }
-
-        PaymentFeedback feedback = new PaymentFeedback();
-
-        feedback.setMemberID(request.getMemberID());
-        feedback.setGoodName(request.getGoodName());
-        feedback.setPrice(request.getPrice());
-        feedback.setRecvPhone(request.getMobile());
-        feedback.setVar1(request.getVar1());
-        feedback.setVar2(request.getVar2());
-
-        feedback.setFeedbackToken("feedbackToken");
-        feedback.setPaymentState(PaymentState.COMPLETE);
-        feedback.setPayType(1); //카드 결제
-        feedback.setOrderNo(util.makeRandomNum());
-        feedback.setApprovalNo(util.makeRandomNum());
-        feedback.setCcname("신한카드");
-        feedback.setCsturl(util.makeRandom());
 
     }
 
