@@ -8,6 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 
 @NoArgsConstructor
 @Getter
@@ -22,6 +23,7 @@ public class PaymentRequest {
 
     @Column(name = "member_id", nullable = false) private String memberID;
 
+    @Min(1000)
     @Column(name = "price", nullable = false) private int price;
 
     @Column(name = "tax_price") private int taxPrice;

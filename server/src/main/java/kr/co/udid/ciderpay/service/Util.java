@@ -26,12 +26,18 @@ public class Util {
     }
 
     public String makeRandomNum() {
-        List<String> makeShuffle = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
-
-        return makeShuffle.get(0) + makeShuffle.get(1) + makeShuffle.get(2) + makeShuffle.get(3) + makeShuffle.get(4) + makeShuffle.get(5) + makeShuffle.get(6);
+        return IntStream.range (0, 4).mapToObj ((f) -> makeShuffleNum()).collect(Collectors.joining(""));
     }
 
-    public static boolean isEmptyStr (String str)
+    public String makeShuffleNum() {
+        List<String> makeShuffle = Arrays.asList("1", "2", "3", "4", "5", "6", "7", "8", "9", "0");
+
+        Collections.shuffle(makeShuffle);
+
+        return makeShuffle.get(0);
+    }
+
+    public boolean isEmptyStr (String str)
     {
         if (str == null)
             return true;

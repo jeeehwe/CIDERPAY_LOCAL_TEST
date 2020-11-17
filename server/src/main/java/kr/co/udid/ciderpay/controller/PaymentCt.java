@@ -7,7 +7,10 @@ import kr.co.udid.ciderpay.model.data.RequestResult;
 import kr.co.udid.ciderpay.model.enums.PaymentState;
 import kr.co.udid.ciderpay.service.PaymentSv;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.ConstraintViolationException;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,9 +24,9 @@ public class PaymentCt {
     {
         RequestResult result = new RequestResult();
 
-        PaymentRequest paymentRequest =  paymentSv.insertTestData(request);
-
-        if (paymentRequest.getPaymentState() == PaymentState.PROGRESS) {
+        try
+        {
+            PaymentRequest paymentRequest =  paymentSv.insertTestData(request);
 
             PaymentRequestSuccess success = new PaymentRequestSuccess();
 
@@ -32,9 +35,18 @@ public class PaymentCt {
             success.setPayUniqueNo(paymentRequest.getPayUniqueNo());
 
             result.setResult(success);
+        }
+        catch (ConstraintViolationException e)
+        {
+            PaymentRequestFail fail = new PaymentRequestFail();
 
-        } else {
+            fail.setErrCode("500");
+            fail.setMessage("price는 1000 이상이어야 합니다.");
 
+            result.setResult(fail);
+        }
+        catch (DataIntegrityViolationException e)
+        {
             PaymentRequestFail fail = new PaymentRequestFail();
 
             fail.setErrCode("500");

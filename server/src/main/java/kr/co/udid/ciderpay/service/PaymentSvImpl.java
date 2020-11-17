@@ -2,12 +2,11 @@ package kr.co.udid.ciderpay.service;
 
 import kr.co.udid.ciderpay.model.PaymentFeedback;
 import kr.co.udid.ciderpay.model.enums.PaymentState;
-import kr.co.udid.ciderpay.repository.PaymentFeedbackRepository;
 import kr.co.udid.ciderpay.repository.PaymentRequestRepository;
 import kr.co.udid.ciderpay.model.PaymentRequest;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.PropertyValueException;
 import org.springframework.stereotype.Service;
+import sun.net.www.http.HttpClient;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,29 +16,21 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PaymentSvImpl implements PaymentSv {
     final private PaymentRequestRepository requestRepository;
-    final private PaymentFeedbackRepository feedbackRepository;
     final private Util util;
 
     @Override
-    public PaymentRequest insertTestData(PaymentRequest request) {
-
+    public PaymentRequest insertTestData(PaymentRequest request)
+    {
         request.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
         request.setSellerName("(주)쏘다");
 
-        PaymentRequest result = new PaymentRequest();
+        request.setPayUrl(util.makeRandom());
+        request.setPaymentState(PaymentState.PROGRESS);
+        request.setPayUniqueNo(util.makeRandom() + util.makeRandom());
+        request.setFeedbackurl("http://localhost:3000/feedback/"+util.makeRandom());
+        request.setReturnurl("http://localhost:3000/return/"+util.makeRandom());
 
-        try
-        {
-            request.setPayUrl(util.makeRandom());
-            request.setPaymentState(PaymentState.PROGRESS);
-            request.setPayUniqueNo(util.makeRandom()+util.makeRandom());
-
-            result = requestRepository.save(request);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
+        PaymentRequest result = requestRepository.save(request);
 
         return result;
     }
@@ -50,14 +41,40 @@ public class PaymentSvImpl implements PaymentSv {
     }
 
     @Override
-    public PaymentRequest getByPayUrl(String payUrl) {
+    public PaymentRequest getByPayUrl(String payUrl)
+    {
         PaymentRequest paymentRequest = requestRepository.findByPayUrl(payUrl);
 
         return paymentRequest;
     }
 
     @Override
-    public PaymentFeedback request(PaymentRequest request) {
+    public PaymentRequest request(PaymentRequest request)
+    {
+        request.setPaymentState(PaymentState.COMPLETE);
+        request.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+
+        PaymentRequest modRequest = requestRepository.save(request);
+
+        feedbackWork(modRequest);
+
+        return modRequest;
+    }
+
+    @Override
+    public void feedbackWork(PaymentRequest request)
+    {
+        String feedbackUrl = request.getFeedbackurl();
+
+        if (!util.isEmptyStr(feedbackUrl))
+        {
+            if (!feedbackUrl.startsWith ("http://") && !feedbackUrl.startsWith ("https://"))
+                feedbackUrl = "http://" + feedbackUrl;
+
+
+
+        }
+
         PaymentFeedback feedback = new PaymentFeedback();
 
         feedback.setMemberID(request.getMemberID());
@@ -75,17 +92,7 @@ public class PaymentSvImpl implements PaymentSv {
         feedback.setCcname("신한카드");
         feedback.setCsturl(util.makeRandom());
 
-        PaymentFeedback result = feedbackRepository.save(feedback);
-
-        request.setPaymentState(PaymentState.COMPLETE);
-        request.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-
-        requestRepository.save(request);
-
-        return result;
     }
-
-
 
 
 }

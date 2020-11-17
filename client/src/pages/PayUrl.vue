@@ -48,8 +48,9 @@ export default {
         payRequest() {
             axios
                 .post(`http://localhost:8080/p/request`, this.paymentRequest)
-                .then(() => {
-                    this.isRequest = !this.isRequest
+                .then(({data}) => {
+                    this.isRequest = !this.isRequest;
+                    this.paymentRequest = data;
                 })
         },
         goBack() {

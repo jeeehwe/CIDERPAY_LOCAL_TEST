@@ -22,15 +22,9 @@ public class ViewCt {
     }
 
     @GetMapping("/{payUrl}")
-    public PaymentRequest paymentView (@PathVariable String payUrl)
-    {
-        return paymentSv.getByPayUrl(payUrl);
-    }
+    public PaymentRequest paymentView (@PathVariable String payUrl) { return paymentSv.getByPayUrl(payUrl); }
 
     @PostMapping("/request")
-    public PaymentFeedback payRequest(@RequestBody PaymentRequest request)
-    {
-        return paymentSv.request(request);
-    }
+    public PaymentRequest payRequest(@RequestBody PaymentRequest request) {  return paymentSv.request(request); }
 
 }
