@@ -34,7 +34,7 @@ public class PaymentSvImpl implements PaymentSv {
         request.setSellerName("(주)쏘다");
 
         request.setPayUrl(util.makeRandom());
-        request.setPaymentState(PaymentState.PROGRESS);
+        request.setPaymentState(PaymentState.REQUEST);
         request.setPayUniqueNo(util.makeRandom() + util.makeRandom());
         request.setFeedbackurl("");
         request.setReturnurl("/");
@@ -132,6 +132,16 @@ public class PaymentSvImpl implements PaymentSv {
 
         }
 
+    }
+
+    @Override
+    public PaymentRequest requestCancel(PaymentRequest request)
+    {
+        PaymentRequest paymentRequest = requestRepository.findByMemberIDAndPayUniqueNo(request.getMemberID(), request.getPayUniqueNo());
+
+        paymentRequest.setPaymentState(PaymentState.REQUEST_CANCEL);
+
+        return requestRepository.save(paymentRequest);
     }
 
 

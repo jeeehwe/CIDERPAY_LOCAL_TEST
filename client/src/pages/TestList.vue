@@ -11,14 +11,25 @@
                 :fields="fields"
                 small striped hover
                 class="text-center"
-            ></b-table>
+            >
+                <template #cell(paymentState)="item">
+                    <b class="text-info">{{ item.item.paymentState }}</b>
+                </template>
+
+                <template #cell(button)="item">
+                    <button v-if="item.item.paymentState === 'PROGRESS'" class="btn btn-sm btn-outline-danger">결제 요청 취소</button>
+                    <button v-if="item.item.paymentState === 'COMPLETE'" class="btn btn-sm btn-danger">결제 취소</button>
+                    <button v-if="item.item.paymentState === 'CANCEL'" class="btn btn-sm btn-danger" disabled>???</button>
+                </template>
+
+            </b-table>
             <b-pagination
                 v-model="currentPage"
                 :total-rows="list.length"
                 :per-page="perPage"
                 aria-controls="my-table"
                 align="center"
-            ></b-pagination>
+             ></b-pagination>
         </div>
         <div v-else> <br/> 내용이 없습니다.</div>
     </div>
@@ -41,6 +52,7 @@ export default {
                 {key: 'mobile', label: '구매자 휴대폰'},
                 {key: 'createDate', label: '요청일시'},
                 {key: 'paymentState', label: '결제 상태'},
+                {key: 'button', label: ''},
             ],
             list: [],
         }
@@ -59,3 +71,8 @@ export default {
     }
 }
 </script>
+
+<style scoped>
+
+
+</style>

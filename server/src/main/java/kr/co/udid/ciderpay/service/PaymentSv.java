@@ -16,4 +16,6 @@ public interface PaymentSv {
     PaymentRequest request (PaymentRequest request);
 
     void feedbackWork(PaymentRequest request);
+
+    PaymentRequest requestCancel(PaymentRequest request);
 }

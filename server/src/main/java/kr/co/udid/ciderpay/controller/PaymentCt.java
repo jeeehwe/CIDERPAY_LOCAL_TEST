@@ -1,6 +1,7 @@
 package kr.co.udid.ciderpay.controller;
 
 import kr.co.udid.ciderpay.model.PaymentRequest;
+import kr.co.udid.ciderpay.model.data.PaymentRequestCancel;
 import kr.co.udid.ciderpay.model.data.PaymentRequestFail;
 import kr.co.udid.ciderpay.model.data.PaymentRequestSuccess;
 import kr.co.udid.ciderpay.model.data.RequestResult;
@@ -59,8 +60,11 @@ public class PaymentCt {
     }
 
     @PostMapping("/request/cancel")
-    public void payCancel(@RequestBody PaymentRequest request)
+    public PaymentRequestCancel requestCancel(@RequestBody PaymentRequest request)
     {
+        // TODO 작성 중
+        PaymentRequest paymentRequest = paymentSv.requestCancel(request);
 
+        return new PaymentRequestCancel(true, "");
     }
 }
