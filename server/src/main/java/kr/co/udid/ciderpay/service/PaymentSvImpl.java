@@ -1,6 +1,10 @@
 package kr.co.udid.ciderpay.service;
 
+import kr.co.udid.ciderpay.model.Payment;
+import kr.co.udid.ciderpay.model.exception.NoDataException;
 import kr.co.udid.ciderpay.model.enums.PaymentState;
+import kr.co.udid.ciderpay.model.exception.ProcessStatusException;
+import kr.co.udid.ciderpay.repository.PaymentRepository;
 import kr.co.udid.ciderpay.repository.PaymentRequestRepository;
 import kr.co.udid.ciderpay.model.PaymentRequest;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +14,7 @@ import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.apache.http.client.HttpClient;
 
@@ -25,17 +30,17 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PaymentSvImpl implements PaymentSv {
     final private PaymentRequestRepository requestRepository;
+    final private PaymentRepository paymentRepository;
     final private Util util;
 
     @Override
     public PaymentRequest insertTestData(PaymentRequest request)
     {
         request.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
-        request.setSellerName("(주)쏘다");
 
-        request.setPayUrl(util.makeRandom());
+        request.setPayUrl(util.makeRandomStr());
         request.setPaymentState(PaymentState.REQUEST);
-        request.setPayUniqueNo(util.makeRandom() + util.makeRandom());
+        request.setPayUniqueNo(util.makeRandomStr() + util.makeRandomStr());
         request.setFeedbackurl("");
         request.setReturnurl("/");
 
@@ -87,21 +92,33 @@ public class PaymentSvImpl implements PaymentSv {
 
             List<NameValuePair> urlParameters = new ArrayList<>();
 
+            String feedbackToken = "feedbackToken";
+            String orderNo = util.makeRandomNum();
+            String approvalNo = util.makeRandomNum();
+
+            Payment payment = new Payment();
+            BeanUtils.copyProperties(request, payment);
+
+            payment.setFeedbackToken(feedbackToken);
+            payment.setOrderNo(orderNo);
+            payment.setApprovalNo(approvalNo);
+            payment.setPaymentState(PaymentState.COMPLETE);
+
             urlParameters.add(new BasicNameValuePair("member_id", request.getMemberID()));
-            urlParameters.add(new BasicNameValuePair("feedback_token", "feedbackToken")); //피드백 토큰 -> 결제 취소 시 필요
+            urlParameters.add(new BasicNameValuePair("feedback_token", feedbackToken)); //피드백 토큰 -> 결제 취소 시 필요
             urlParameters.add(new BasicNameValuePair("good_name", request.getGoodName()));
             urlParameters.add(new BasicNameValuePair("price", String.valueOf(request.getPrice())));
             urlParameters.add(new BasicNameValuePair("recv_phone", request.getMobile()));
             urlParameters.add(new BasicNameValuePair("payment_state", request.getPaymentState().name()));
             urlParameters.add(new BasicNameValuePair("pay_type", "1")); //결제 수단 - 카드 결제
-            urlParameters.add(new BasicNameValuePair("order_no", util.makeRandomNum())); //주문번호
-            urlParameters.add(new BasicNameValuePair("approval_no", util.makeRandomNum())); //승인번호
+            urlParameters.add(new BasicNameValuePair("order_no", orderNo)); //주문번호
+            urlParameters.add(new BasicNameValuePair("approval_no", approvalNo)); //승인번호
             urlParameters.add(new BasicNameValuePair("ccname", "신한카드"));
             urlParameters.add(new BasicNameValuePair("var1", request.getVar1()));
             urlParameters.add(new BasicNameValuePair("var2", request.getVar2()));
             urlParameters.add(new BasicNameValuePair("card_num", "1234-****-****-1234"));
             urlParameters.add(new BasicNameValuePair("card_quota", "3")); //할부 개월
-            urlParameters.add(new BasicNameValuePair("csturl", util.makeRandom())); //영수증 url
+            urlParameters.add(new BasicNameValuePair("csturl", util.makeRandomStr())); //영수증 url
 
             post.setEntity(new UrlEncodedFormEntity(urlParameters, StandardCharsets.UTF_8));
 
@@ -110,7 +127,12 @@ public class PaymentSvImpl implements PaymentSv {
                 HttpResponse response = client.execute(post);
 
                 request.setStatusCode(response.getStatusLine().getStatusCode());
+
+                //결제 요청 저장
                 requestRepository.save(request);
+
+                //결제 저장
+                paymentRepository.save(payment);
 
                 BufferedReader rd = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
 
@@ -135,13 +157,60 @@ public class PaymentSvImpl implements PaymentSv {
     }
 
     @Override
-    public PaymentRequest requestCancel(PaymentRequest request)
+    public PaymentRequest requestCancel(PaymentRequest request) throws ProcessStatusException, NoDataException
     {
         PaymentRequest paymentRequest = requestRepository.findByMemberIDAndPayUniqueNo(request.getMemberID(), request.getPayUniqueNo());
+
+        if (paymentRequest == null)
+            throw new NoDataException();
+
+        if (paymentRequest.getPaymentState() != PaymentState.REQUEST)
+            throw new ProcessStatusException();
 
         paymentRequest.setPaymentState(PaymentState.REQUEST_CANCEL);
 
         return requestRepository.save(paymentRequest);
+    }
+
+    public Payment checkPaymentExist (Payment requiredPayment) throws NoDataException
+    {
+        Payment payment = paymentRepository.findByOrderNoAndToken(requiredPayment.getOrderNo(), requiredPayment.getToken());
+
+        if (payment == null)
+            throw new NoDataException();
+
+        return payment;
+    }
+
+    @Override
+    public boolean cancelPayment(Payment requiredPayment) throws NoDataException, ProcessStatusException {
+        Payment payment = checkPaymentExist(requiredPayment);
+
+        if (payment.getPaymentState() != PaymentState.COMPLETE)
+            throw new ProcessStatusException();
+
+        payment.setPaymentState(PaymentState.CANCEL);
+        payment.setCancelMessage(requiredPayment.getCancelMessage());
+
+        paymentRepository.save(payment);
+
+        return true;
+    }
+
+    @Override
+    public boolean cancelRequestAfterAdjust(Payment requiredPayment) throws NoDataException, ProcessStatusException {
+        Payment payment = checkPaymentExist(requiredPayment);
+
+        if (payment.getPaymentState() != PaymentState.ADJUST)
+            throw new ProcessStatusException();
+
+        payment.setPaymentState(PaymentState.CANCEL_REQUEST_AFTER_ADJUST);
+        payment.setCancelMessage(requiredPayment.getCancelMessage());
+        payment.setBankInName(requiredPayment.getBankInName());
+
+        paymentRepository.save(payment);
+
+        return true;
     }
 
 

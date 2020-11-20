@@ -1,4 +1,4 @@
-package kr.co.udid.ciderpay.model.data;
+package kr.co.udid.ciderpay.model.result.payment;
 
 import kr.co.udid.ciderpay.model.PaymentRequest;
 import lombok.*;

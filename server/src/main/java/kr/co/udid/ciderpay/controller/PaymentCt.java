@@ -1,11 +1,14 @@
 package kr.co.udid.ciderpay.controller;
 
+import kr.co.udid.ciderpay.model.Payment;
+import kr.co.udid.ciderpay.model.result.payment.PaymentCancelResult;
+import kr.co.udid.ciderpay.model.exception.NoDataException;
 import kr.co.udid.ciderpay.model.PaymentRequest;
-import kr.co.udid.ciderpay.model.data.PaymentRequestCancel;
-import kr.co.udid.ciderpay.model.data.PaymentRequestFail;
-import kr.co.udid.ciderpay.model.data.PaymentRequestSuccess;
-import kr.co.udid.ciderpay.model.data.RequestResult;
-import kr.co.udid.ciderpay.model.enums.PaymentState;
+import kr.co.udid.ciderpay.model.result.payment.PaymentRequestSuccess;
+import kr.co.udid.ciderpay.model.result.CommonResult;
+import kr.co.udid.ciderpay.model.exception.ProcessStatusException;
+import kr.co.udid.ciderpay.model.result.FailMessage;
+import kr.co.udid.ciderpay.model.result.ResultMessage;
 import kr.co.udid.ciderpay.service.PaymentSv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -23,7 +26,7 @@ public class PaymentCt {
     @PostMapping("/request")
     public Object paymentRequest (@RequestBody PaymentRequest request)
     {
-        RequestResult result = new RequestResult();
+        CommonResult result = new CommonResult();
 
         try
         {
@@ -39,32 +42,85 @@ public class PaymentCt {
         }
         catch (ConstraintViolationException e)
         {
-            PaymentRequestFail fail = new PaymentRequestFail();
-
-            fail.setErrCode("500");
-            fail.setMessage("price는 1000 이상이어야 합니다.");
-
-            result.setResult(fail);
+            result.setResult(new FailMessage("500", "price는 1000 이상이어야 합니다."));
         }
         catch (DataIntegrityViolationException e)
         {
-            PaymentRequestFail fail = new PaymentRequestFail();
-
-            fail.setErrCode("500");
-            fail.setMessage("필수 정보를 빠짐없이 입력해주세요");
-
-            result.setResult(fail);
+            result.setResult(new FailMessage("500", "필수 정보를 빠짐없이 입력해주세요."));
         }
 
         return result.getResult();
     }
 
     @PostMapping("/request/cancel")
-    public PaymentRequestCancel requestCancel(@RequestBody PaymentRequest request)
+    public ResultMessage paymentRequestCancel(@RequestBody PaymentRequest request)
     {
-        // TODO 작성 중
-        PaymentRequest paymentRequest = paymentSv.requestCancel(request);
-
-        return new PaymentRequestCancel(true, "");
+        try
+        {
+            paymentSv.requestCancel(request);
+            
+            return new ResultMessage(true, "요청이 취소 되었습니다.");
+        }
+        catch (NoDataException e)
+        {
+            return new ResultMessage(false, "존재하지 않는 결제 요청입니다.");
+        }
+        catch (ProcessStatusException e)
+        {
+            return new ResultMessage(false, "요청 취소 가능 상태가 아닙니다.");
+        }
     }
+
+    @PostMapping("/cancel")
+    public Object paymentCancel (@RequestBody Payment payment)
+    {
+        CommonResult result = new CommonResult();
+
+        try
+        {
+            boolean success = paymentSv.cancelPayment(payment);
+
+            PaymentCancelResult cancelResult = new PaymentCancelResult();
+
+            cancelResult.setSuccess(success);
+            cancelResult.setErrorMessage("취소되었습니다");
+
+            result.setResult(cancelResult);
+        }
+        catch (ProcessStatusException e)
+        {
+            result.setResult(new FailMessage("2001", "ERROR_CANCEL_STATE"));
+        }
+        catch (NoDataException e)
+        {
+            result.setResult(new FailMessage("2002", "ERROR_CANCEL_TOKEN"));
+        }
+
+        return result.getResult();
+    }
+
+    @PostMapping("/cancelRequest")
+    public Object cancelRequestAfterAdjust (@RequestBody Payment payment)
+    {
+        CommonResult result = new CommonResult();
+
+        try
+        {
+            boolean success = paymentSv.cancelRequestAfterAdjust(payment);
+
+            result.setResult(new ResultMessage(success, "결제 취소가 요청되었습니다."));
+
+        }
+        catch (ProcessStatusException e)
+        {
+            result.setResult(new FailMessage("2001", "ERROR_CANCEL_STATE"));
+        }
+        catch (NoDataException e)
+        {
+            result.setResult(new FailMessage("2002", "ERROR_CANCEL_TOKEN"));
+        }
+
+        return result.getResult();
+    }
+
 }

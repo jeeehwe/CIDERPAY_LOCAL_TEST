@@ -10,11 +10,11 @@ import java.util.stream.IntStream;
 
 @Component
 public class Util {
-    public String makeRandom() {
-        return IntStream.range (0, 6).mapToObj ((f) -> makeRandomStr()).collect(Collectors.joining(""));
+    public String makeRandomStr() {
+        return IntStream.range (0, 6).mapToObj ((f) -> makeShuffleStr()).collect(Collectors.joining(""));
     }
 
-    public String makeRandomStr() {
+    public String makeShuffleStr() {
         List<String> makeShuffle = Arrays.asList(
                 "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "n",
                 "m", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",
