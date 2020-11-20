@@ -65,4 +65,9 @@ public class PaymentRequest {
 
     @Column(name = "status_code") private int statusCode;
 
+    @Column(name = "feedback_token") private String feedbackToken;
+
+    @Column(name = "order_no") private String orderNo;
+
+    @Column(name = "approval_no") private String approvalNo;
 }

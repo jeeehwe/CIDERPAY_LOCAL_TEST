@@ -11,8 +11,8 @@
             </div><br/>
             <div class="space">카드결제</div><br/>
             <button v-if="isRequest" class="btn btn-success" @click="payRequest">결제하기</button>
-            <button v-if="!isRequest" class="btn btn-danger" @click="payCancel">결제취소</button>{{' '}}
-            <button v-if="!isRequest" class="btn btn-outline-dark" @click="goBack">되돌아가기</button>
+            <button v-if="!isRequest" class="btn btn-danger" @click="payCancel">결제 요청 취소</button>{{' '}}
+            <button class="btn btn-outline-dark" @click="goBack">되돌아가기</button>
         </div>
 
         <div v-else>잘못된 주소입니다.</div>
@@ -38,7 +38,7 @@ export default {
                 if (data !== "") {
                     this.isCorrect = true;
                     this.paymentRequest = data;
-                    this.isRequest = (data.paymentState === 'PROGRESS');
+                    this.isRequest = (data.paymentState === 'REQUEST');
                 } else
                     this.isCorrect = false;
             })

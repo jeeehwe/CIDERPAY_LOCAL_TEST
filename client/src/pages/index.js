@@ -1,4 +1,5 @@
-import PayUrl from "@/pages/PayUrl";
-import TestList from "@/pages/TestList";
+import PayUrl from "./PayUrl";
+import RequestList from "./RequestList";
+import PaymentList from "./PaymentList";
 
-export default {PayUrl, TestList};
+export default {PayUrl, RequestList, PaymentList};

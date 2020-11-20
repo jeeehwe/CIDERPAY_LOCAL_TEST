@@ -17,9 +17,11 @@
                 </template>
 
                 <template #cell(button)="item">
-                    <button v-if="item.item.paymentState === 'PROGRESS'" class="btn btn-sm btn-outline-danger">결제 요청 취소</button>
+                    <button v-if="item.item.paymentState === 'REQUEST'" class="btn btn-sm btn-outline-danger">결제 요청 취소
+                    </button>
                     <button v-if="item.item.paymentState === 'COMPLETE'" class="btn btn-sm btn-danger">결제 취소</button>
-                    <button v-if="item.item.paymentState === 'CANCEL'" class="btn btn-sm btn-danger" disabled>???</button>
+                    <button v-if="item.item.paymentState === 'CANCEL'" class="btn btn-sm btn-danger" disabled>???
+                    </button>
                 </template>
 
             </b-table>
@@ -29,17 +31,17 @@
                 :per-page="perPage"
                 aria-controls="my-table"
                 align="center"
-             ></b-pagination>
+            ></b-pagination>
         </div>
-        <div v-else> <br/> 내용이 없습니다.</div>
+        <div v-else><br/> 내용이 없습니다.</div>
     </div>
 </template>
 
 <script>
-import axios from 'axios';
+import axios from "axios";
 
 export default {
-    name: 'TestList',
+    name: "PaymentList",
     data() {
         return {
             perPage: 10,
@@ -63,7 +65,7 @@ export default {
     methods: {
         getLists() {
             axios
-                .get("http://localhost:8080/p/list")
+                .get("http://localhost:8080/p/list/payment")
                 .then(({data}) => {
                     this.list = data;
                 })
@@ -73,6 +75,5 @@ export default {
 </script>
 
 <style scoped>
-
 
 </style>

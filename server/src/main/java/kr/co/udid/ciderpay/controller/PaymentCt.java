@@ -9,6 +9,7 @@ import kr.co.udid.ciderpay.model.result.CommonResult;
 import kr.co.udid.ciderpay.model.exception.ProcessStatusException;
 import kr.co.udid.ciderpay.model.result.FailMessage;
 import kr.co.udid.ciderpay.model.result.ResultMessage;
+import kr.co.udid.ciderpay.service.PaymentRequestSv;
 import kr.co.udid.ciderpay.service.PaymentSv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -21,6 +22,7 @@ import javax.validation.ConstraintViolationException;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/oapi/payment")
 public class PaymentCt {
+    final private PaymentRequestSv paymentRequestSv;
     final private PaymentSv paymentSv;
 
     @PostMapping("/request")
@@ -30,7 +32,7 @@ public class PaymentCt {
 
         try
         {
-            PaymentRequest paymentRequest =  paymentSv.insertTestData(request);
+            PaymentRequest paymentRequest =  paymentRequestSv.insertTestData(request);
 
             PaymentRequestSuccess success = new PaymentRequestSuccess();
 
@@ -57,7 +59,7 @@ public class PaymentCt {
     {
         try
         {
-            paymentSv.requestCancel(request);
+            paymentRequestSv.requestCancel(request);
             
             return new ResultMessage(true, "요청이 취소 되었습니다.");
         }
