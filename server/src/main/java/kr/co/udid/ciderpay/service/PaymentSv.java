@@ -10,4 +10,6 @@ public interface PaymentSv extends JpaService<Payment>
     boolean cancelPayment(Payment requiredPayment) throws NoDataException, ProcessStatusException;
 
     boolean cancelRequestAfterAdjust(Payment requiredPayment) throws NoDataException, ProcessStatusException;
+
+    Payment makeAdjust(Payment payment);
 }

@@ -23,10 +23,13 @@ public class ViewCt {
     @GetMapping("/{payUrl}")
     public PaymentRequest paymentView (@PathVariable String payUrl) { return paymentRequestSv.getByPayUrl(payUrl); }
 
-    @PostMapping("/request")
+    @PostMapping("/payment")
     public PaymentRequest payRequest(@RequestBody PaymentRequest request) {  return paymentRequestSv.request(request); }
 
     @GetMapping("/list/payment")
     public Iterable<Payment> findAllPayment() { return paymentSv.findAll(); }
+
+    @PutMapping("/adjust")
+    public Payment adjust(@RequestBody Payment payment) { return paymentSv.makeAdjust(payment); }
 
 }

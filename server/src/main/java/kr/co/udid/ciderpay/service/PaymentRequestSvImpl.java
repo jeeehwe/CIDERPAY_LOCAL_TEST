@@ -41,7 +41,7 @@ public class PaymentRequestSvImpl implements PaymentRequestSv {
         request.setPayUrl(util.makeRandomStr());
         request.setPaymentState(PaymentState.REQUEST);
         request.setPayUniqueNo(util.makeRandomStr() + util.makeRandomStr());
-        request.setFeedbackurl("");
+        request.setFeedbackurl("http://localhost:8080");
         request.setReturnurl("/");
 
         PaymentRequest result = requestRepository.save(request);
@@ -93,6 +93,7 @@ public class PaymentRequestSvImpl implements PaymentRequestSv {
             List<NameValuePair> urlParameters = new ArrayList<>();
 
             String feedbackToken = "feedbackToken";
+            String token = "token";
             String orderNo = util.makeRandomNum();
             String approvalNo = util.makeRandomNum();
 
@@ -100,6 +101,7 @@ public class PaymentRequestSvImpl implements PaymentRequestSv {
             BeanUtils.copyProperties(request, payment);
 
             payment.setFeedbackToken(feedbackToken);
+            payment.setToken(token);
             payment.setOrderNo(orderNo);
             payment.setApprovalNo(approvalNo);
             payment.setPaymentState(PaymentState.COMPLETE);

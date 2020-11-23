@@ -21,7 +21,7 @@ import javax.validation.ConstraintViolationException;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/oapi/payment")
-public class PaymentCt {
+public class ApiCt {
     final private PaymentRequestSv paymentRequestSv;
     final private PaymentSv paymentSv;
 
@@ -110,7 +110,7 @@ public class PaymentCt {
         {
             boolean success = paymentSv.cancelRequestAfterAdjust(payment);
 
-            result.setResult(new ResultMessage(success, "결제 취소가 요청되었습니다."));
+            result.setResult(new ResultMessage(success, "정산된 결제 건이 취소되었습니다."));
 
         }
         catch (ProcessStatusException e)

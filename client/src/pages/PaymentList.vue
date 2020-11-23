@@ -1,6 +1,8 @@
 <template>
     <div style="padding: 1%">
-        <button class="btn btn-outline-primary" @click="getLists">새로고침</button>
+        <h3>결제 리스트</h3>
+        <button class="btn btn-outline-primary" @click="getLists">새로고침</button>{{' '}}
+        <button class="btn btn-primary" @click="$router.push('/')">결제 요청 리스트</button>{{' '}}
         <div v-if="list.length !== 0" class="overflow-auto">
             <div style="padding-top: 10px"></div>
             <b-table
@@ -17,11 +19,9 @@
                 </template>
 
                 <template #cell(button)="item">
-                    <button v-if="item.item.paymentState === 'REQUEST'" class="btn btn-sm btn-outline-danger">결제 요청 취소
-                    </button>
-                    <button v-if="item.item.paymentState === 'COMPLETE'" class="btn btn-sm btn-danger">결제 취소</button>
-                    <button v-if="item.item.paymentState === 'CANCEL'" class="btn btn-sm btn-danger" disabled>???
-                    </button>
+                    <button v-if="item.item.paymentState === 'COMPLETE'" class="btn btn-sm btn-success" @click="makeAdjust(item.item)">정산하기</button>{{' '}}
+                    <button v-if="item.item.paymentState === 'COMPLETE'" class="btn btn-sm btn-danger" @click="paymentCancel(item.item)">결제 취소</button>
+                    <button v-if="item.item.paymentState === 'ADJUST'" class="btn btn-sm btn-danger" @click="cancelRequestAfterAdjust(item.item)">정산된 결제 취소</button>
                 </template>
 
             </b-table>
@@ -39,6 +39,8 @@
 
 <script>
 import axios from "axios";
+import api from "@/api/api";
+import view from "@/api/view";
 
 export default {
     name: "PaymentList",
@@ -60,7 +62,7 @@ export default {
         }
     },
     created() {
-        this.getLists()
+        this.getLists();
     },
     methods: {
         getLists() {
@@ -69,6 +71,32 @@ export default {
                 .then(({data}) => {
                     this.list = data;
                 })
+        },
+        paymentCancel(item) {
+            api.paymentCancel({
+                memberID: item.memberID,
+                orderNo: item.orderNo,
+                token: item.token,
+                cancelMessage: '취소 요청 사유'
+            }, () => {
+                alert('결제가 취소되었습니다.');
+                this.getLists();
+            })
+        },
+        cancelRequestAfterAdjust(item) {
+            api.cancelRequestAfterAdjust({
+                memberID: item.memberID,
+                orderNo: item.orderNo,
+                token: item.token,
+                cancelMessage: '취소 요청 사유',
+                bankInName: '입금자명'
+            }, (res) => {
+                alert(res.data.errorMessage);
+                this.getLists();
+            })
+        },
+        makeAdjust(item) {
+            view.makeAdjust(item, () => this.getLists())
         }
     }
 }

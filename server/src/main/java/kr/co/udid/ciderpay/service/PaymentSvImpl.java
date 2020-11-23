@@ -1,7 +1,6 @@
 package kr.co.udid.ciderpay.service;
 
 import kr.co.udid.ciderpay.model.Payment;
-import kr.co.udid.ciderpay.model.PaymentRequest;
 import kr.co.udid.ciderpay.model.enums.PaymentState;
 import kr.co.udid.ciderpay.model.exception.NoDataException;
 import kr.co.udid.ciderpay.model.exception.ProcessStatusException;
@@ -51,12 +50,19 @@ public class PaymentSvImpl implements PaymentSv{
         if (payment.getPaymentState() != PaymentState.ADJUST)
             throw new ProcessStatusException();
 
-        payment.setPaymentState(PaymentState.CANCEL_REQUEST_AFTER_ADJUST);
+        payment.setPaymentState(PaymentState.REQUEST_CANCEL_AFTER_ADJUST);
         payment.setCancelMessage(requiredPayment.getCancelMessage());
         payment.setBankInName(requiredPayment.getBankInName());
 
         paymentRepository.save(payment);
 
         return true;
+    }
+
+    @Override
+    public Payment makeAdjust(Payment payment) {
+        payment.setPaymentState(PaymentState.ADJUST);
+
+        return paymentRepository.save(payment);
     }
 }

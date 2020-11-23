@@ -1,6 +1,8 @@
 <template>
     <div style="padding: 1%">
-        <button class="btn btn-outline-primary" @click="getLists">새로고침</button>
+        <h3>결제 요청 리스트</h3>
+        <button class="btn btn-outline-primary" @click="getLists">새로고침</button>{{' '}}
+        <button class="btn btn-primary" @click="$router.push('/list/payment')">결제 리스트</button>
         <div v-if="list.length !== 0" class="overflow-auto">
             <div style="padding-top: 10px"></div>
             <b-table
@@ -17,10 +19,9 @@
                 </template>
 
                 <template #cell(button)="item">
-                    <button v-if="item.item.paymentState === 'REQUEST'" class="btn btn-sm btn-primary">결제하기</button>{{' '}}
-                    <button v-if="item.item.paymentState === 'REQUEST'" class="btn btn-sm btn-outline-primary">결제 요청 취소</button>{{' '}}
-                    <button v-if="item.item.paymentState === 'COMPLETE'" class="btn btn-sm btn-danger">결제 취소</button>
-                    <button v-if="item.item.paymentState === 'ADJUST'" class="btn btn-sm">정산된 결제 취소</button>
+                    <button v-if="item.item.paymentState === 'REQUEST'" class="btn btn-sm btn-primary" @click="makePayment(item.item)">결제하기</button>{{' '}}
+                    <button v-if="item.item.paymentState === 'REQUEST'" class="btn btn-sm btn-outline-primary" @click="paymentRequestCancel(item.item)">결제 요청 취소</button>{{' '}}
+                    <button v-if="item.item.paymentState === 'COMPLETE'" class="btn btn-sm btn-outline-success" @click="$router.push('/list/payment')">결제 리스트 보기</button>{{' '}}
                 </template>
 
             </b-table>
@@ -38,9 +39,11 @@
 
 <script>
 import axios from 'axios';
+import api from "@/api/api";
+import view from "@/api/view";
 
 export default {
-    name: 'TestList',
+    name: 'RequestList',
     data() {
         return {
             perPage: 10,
@@ -71,6 +74,18 @@ export default {
                     this.list = data;
                 })
         },
+        paymentRequestCancel(item) {
+            api.paymentRequestCancel({
+                memberID: item.memberID,
+                payUniqueNo: item.payUniqueNo
+            }, () => {
+                alert('결제 요청이 취소되었습니다.');
+                this.getLists();
+            })
+        },
+        makePayment(item) {
+            view.makePayment(item, () => this.getLists())
+        }
     }
 }
 </script>

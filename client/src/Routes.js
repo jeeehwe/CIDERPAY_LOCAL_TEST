@@ -10,6 +10,6 @@ export default new Router({
     routes: [
         { path: '/', component: Index.RequestList },
         { path: '/p/:payUrl', component: Index.PayUrl },
-        { path: '/payment', component: Index.PaymentList },
+        { path: '/list/payment', component: Index.PaymentList },
     ],
 });
