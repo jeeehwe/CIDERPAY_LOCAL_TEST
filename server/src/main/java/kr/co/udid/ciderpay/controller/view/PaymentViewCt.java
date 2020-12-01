@@ -1,4 +1,4 @@
-package kr.co.udid.ciderpay.controller;
+package kr.co.udid.ciderpay.controller.view;
 
 import kr.co.udid.ciderpay.model.Payment;
 import kr.co.udid.ciderpay.model.PaymentRequest;
@@ -7,13 +7,12 @@ import kr.co.udid.ciderpay.service.PaymentSv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/p")
-public class ViewCt {
+public class PaymentViewCt
+{
     final private PaymentRequestSv paymentRequestSv;
     final private PaymentSv paymentSv;
 

@@ -21,8 +21,8 @@
 
 <script>
 import axios from 'axios'
-import api from "@/api/api";
-import view from "@/api/view";
+import api from "@/api/paymentApi";
+import view from "@/api/view/paymentView";
 
 export default {
     name: "PayUrl",

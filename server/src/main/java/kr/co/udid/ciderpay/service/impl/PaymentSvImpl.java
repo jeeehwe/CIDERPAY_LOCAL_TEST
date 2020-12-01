@@ -1,16 +1,18 @@
-package kr.co.udid.ciderpay.service;
+package kr.co.udid.ciderpay.service.impl;
 
 import kr.co.udid.ciderpay.model.Payment;
 import kr.co.udid.ciderpay.model.enums.PaymentState;
 import kr.co.udid.ciderpay.model.exception.NoDataException;
 import kr.co.udid.ciderpay.model.exception.ProcessStatusException;
 import kr.co.udid.ciderpay.repository.PaymentRepository;
+import kr.co.udid.ciderpay.service.PaymentSv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PaymentSvImpl implements PaymentSv{
+public class PaymentSvImpl implements PaymentSv
+{
     final private PaymentRepository paymentRepository;
 
     @Override

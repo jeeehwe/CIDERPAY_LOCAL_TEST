@@ -5,7 +5,6 @@ import kr.co.udid.ciderpay.model.enums.SmsUse;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -19,7 +18,7 @@ public class Payment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "payment_id", nullable = false) private Long paymentId;
+    @Column(name = "id", nullable = false) private Long id;
 
     @Column(name = "member_id", nullable = false) private String memberID;
 

@@ -1,9 +1,9 @@
 package kr.co.udid.ciderpay.service;
 
 import kr.co.udid.ciderpay.model.Payment;
-import kr.co.udid.ciderpay.model.PaymentRequest;
 import kr.co.udid.ciderpay.model.exception.NoDataException;
 import kr.co.udid.ciderpay.model.exception.ProcessStatusException;
+import kr.co.udid.ciderpay.service.common.JpaService;
 
 public interface PaymentSv extends JpaService<Payment>
 {

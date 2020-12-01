@@ -1,5 +1,5 @@
 import PayUrl from "./PayUrl";
-import RequestList from "./RequestList";
+import Home from "./Home";
 import PaymentList from "./PaymentList";
 
-export default {PayUrl, RequestList, PaymentList};
+export default {PayUrl, Home, PaymentList};

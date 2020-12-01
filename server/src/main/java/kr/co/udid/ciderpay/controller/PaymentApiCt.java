@@ -21,7 +21,8 @@ import javax.validation.ConstraintViolationException;
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/oapi/payment")
-public class ApiCt {
+public class PaymentApiCt
+{
     final private PaymentRequestSv paymentRequestSv;
     final private PaymentSv paymentSv;
 

@@ -1,4 +1,4 @@
-package kr.co.udid.ciderpay.service;
+package kr.co.udid.ciderpay.service.common;
 
 import org.springframework.stereotype.Component;
 

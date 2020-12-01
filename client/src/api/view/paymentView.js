@@ -1,4 +1,4 @@
-import http from "./http";
+import http from "../http";
 
 const url = "http://localhost:8080/p";
 

@@ -18,7 +18,7 @@ import javax.validation.constraints.Min;
 public class PaymentRequest {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "request_id", nullable = false) private Long requestId;
+    @Column(name = "id", nullable = false) private Long id;
 
     @Column(name = "member_id", nullable = false) private String memberID;
 
