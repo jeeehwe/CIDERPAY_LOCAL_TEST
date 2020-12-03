@@ -1,5 +1,6 @@
 package kr.co.udid.ciderpay.model.payment;
 
+import kr.co.udid.ciderpay.model.payment.enums.ReturnMode;
 import kr.co.udid.ciderpay.model.payment.enums.SmsUse;
 import kr.co.udid.ciderpay.model.payment.enums.PaymentState;
 import lombok.Getter;
@@ -42,7 +43,7 @@ public class PaymentRequest {
 
     @Column(name = "returnurl")  private String returnurl;
 
-    @Column(name = "returnmode")  private String returnmode;
+    @Column(name = "returnmode")  private ReturnMode returnmode;
 
     @Column(name = "var1")  private String var1;
 

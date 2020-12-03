@@ -2,6 +2,7 @@ package kr.co.udid.ciderpay.controller;
 
 import kr.co.udid.ciderpay.model.common.ErrorCode;
 import kr.co.udid.ciderpay.model.payment.Payment;
+import kr.co.udid.ciderpay.model.payment.data.PaymentRequestData;
 import kr.co.udid.ciderpay.model.payment.result.PaymentCancelResult;
 import kr.co.udid.ciderpay.model.common.exception.NoDataException;
 import kr.co.udid.ciderpay.model.payment.PaymentRequest;
@@ -28,12 +29,12 @@ public class PaymentApiCt
     final private PaymentSv paymentSv;
 
     @PostMapping("/request")
-    public Object paymentRequest (@RequestBody PaymentRequest request)
+    public Object paymentRequest (@RequestBody PaymentRequestData data)
     {
         CommonResult result = new CommonResult ();
 
         try {
-            PaymentRequest paymentRequest = paymentRequestSv.insertTestData (request);
+            PaymentRequest paymentRequest = paymentRequestSv.insertTestData (data);
 
             PaymentRequestSuccess success = new PaymentRequestSuccess ();
 
@@ -44,10 +45,10 @@ public class PaymentApiCt
             result.setResult (success);
         }
         catch (ConstraintViolationException e) {
-            result.setResult (new FailMessage ("500", "price는 1000 이상이어야 합니다."));
+            result.setResult (new FailMessage ("", "price는 1000 이상이어야 합니다."));
         }
         catch (DataIntegrityViolationException e) {
-            result.setResult (new FailMessage ("500", "필수 정보를 빠짐없이 입력해주세요."));
+            result.setResult (new FailMessage ("", "필수 정보를 빠짐없이 입력해주세요."));
         }
 
         return result.getResult ();

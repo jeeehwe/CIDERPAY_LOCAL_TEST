@@ -19,6 +19,7 @@ public class ControllerHandler
             builder.append("입력된 값: [").append(fieldError.getRejectedValue()).append("]\n");
             builder.append("[").append(fieldError.getField()).append("](은)는 ");
             builder.append(fieldError.getDefaultMessage());
+            builder.append ("\n");
         }
 
         return builder.toString();
