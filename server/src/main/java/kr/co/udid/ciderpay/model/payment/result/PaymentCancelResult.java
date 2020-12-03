@@ -1,6 +1,6 @@
-package kr.co.udid.ciderpay.model.result.payment;
+package kr.co.udid.ciderpay.model.payment.result;
 
-import kr.co.udid.ciderpay.model.result.ResultMessage;
+import kr.co.udid.ciderpay.model.common.result.ResultMessage;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

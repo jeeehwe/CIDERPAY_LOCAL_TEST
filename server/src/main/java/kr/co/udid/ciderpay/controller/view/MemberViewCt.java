@@ -1,6 +1,6 @@
 package kr.co.udid.ciderpay.controller.view;
 
-import kr.co.udid.ciderpay.model.Member;
+import kr.co.udid.ciderpay.model.member.Member;
 import kr.co.udid.ciderpay.service.MemberSv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;

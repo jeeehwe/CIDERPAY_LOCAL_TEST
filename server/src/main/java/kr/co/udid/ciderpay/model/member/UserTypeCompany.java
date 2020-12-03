@@ -1,4 +1,4 @@
-package kr.co.udid.ciderpay.model.notYet;
+package kr.co.udid.ciderpay.model.member;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

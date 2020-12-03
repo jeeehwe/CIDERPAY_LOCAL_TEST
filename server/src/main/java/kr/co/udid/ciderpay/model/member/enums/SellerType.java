@@ -1,4 +1,4 @@
-package kr.co.udid.ciderpay.model.enums;
+package kr.co.udid.ciderpay.model.member.enums;
 
 public enum SellerType
 {

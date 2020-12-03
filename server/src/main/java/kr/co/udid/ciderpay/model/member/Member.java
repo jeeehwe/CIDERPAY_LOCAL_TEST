@@ -1,10 +1,8 @@
-package kr.co.udid.ciderpay.model;
+package kr.co.udid.ciderpay.model.member;
 
-import kr.co.udid.ciderpay.model.enums.BizKind;
-import kr.co.udid.ciderpay.model.enums.SellerType;
-import kr.co.udid.ciderpay.model.enums.UserType;
-import kr.co.udid.ciderpay.model.notYet.UserTypeCompany;
-import kr.co.udid.ciderpay.model.notYet.UserTypePersonal;
+import kr.co.udid.ciderpay.model.member.enums.BizKind;
+import kr.co.udid.ciderpay.model.member.enums.SellerType;
+import kr.co.udid.ciderpay.model.member.enums.UserType;
 import kr.co.udid.ciderpay.service.common.EnumConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

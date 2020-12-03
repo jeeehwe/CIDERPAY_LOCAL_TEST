@@ -1,12 +1,12 @@
 package kr.co.udid.ciderpay.service.impl;
 
-import kr.co.udid.ciderpay.model.Payment;
-import kr.co.udid.ciderpay.model.exception.NoDataException;
-import kr.co.udid.ciderpay.model.enums.PaymentState;
-import kr.co.udid.ciderpay.model.exception.ProcessStatusException;
+import kr.co.udid.ciderpay.model.payment.Payment;
+import kr.co.udid.ciderpay.model.common.exception.NoDataException;
+import kr.co.udid.ciderpay.model.payment.enums.PaymentState;
+import kr.co.udid.ciderpay.model.common.exception.ProcessStatusException;
 import kr.co.udid.ciderpay.repository.PaymentRepository;
 import kr.co.udid.ciderpay.repository.PaymentRequestRepository;
-import kr.co.udid.ciderpay.model.PaymentRequest;
+import kr.co.udid.ciderpay.model.payment.PaymentRequest;
 import kr.co.udid.ciderpay.service.PaymentRequestSv;
 import kr.co.udid.ciderpay.service.common.Util;
 import lombok.RequiredArgsConstructor;

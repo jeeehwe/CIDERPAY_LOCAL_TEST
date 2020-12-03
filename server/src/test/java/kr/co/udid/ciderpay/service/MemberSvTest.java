@@ -1,14 +1,14 @@
 package kr.co.udid.ciderpay.service;
 
-import kr.co.udid.ciderpay.model.Member;
-import kr.co.udid.ciderpay.model.data.MemberRegisterData;
-import kr.co.udid.ciderpay.model.enums.BizKind;
-import kr.co.udid.ciderpay.model.enums.SellerType;
-import kr.co.udid.ciderpay.model.enums.UserType;
-import kr.co.udid.ciderpay.model.exception.ExistDataException;
-import kr.co.udid.ciderpay.model.exception.NoDataException;
-import kr.co.udid.ciderpay.model.exception.NotSetRequiredDataException;
-import kr.co.udid.ciderpay.model.notYet.UserTypePersonal;
+import kr.co.udid.ciderpay.model.member.Member;
+import kr.co.udid.ciderpay.model.member.data.MemberRegisterData;
+import kr.co.udid.ciderpay.model.member.enums.BizKind;
+import kr.co.udid.ciderpay.model.member.enums.SellerType;
+import kr.co.udid.ciderpay.model.member.enums.UserType;
+import kr.co.udid.ciderpay.model.common.exception.ExistDataException;
+import kr.co.udid.ciderpay.model.common.exception.NoDataException;
+import kr.co.udid.ciderpay.model.common.exception.NotSetRequiredDataException;
+import kr.co.udid.ciderpay.model.member.UserTypePersonal;
 import kr.co.udid.ciderpay.repository.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;

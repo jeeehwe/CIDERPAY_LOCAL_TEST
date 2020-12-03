@@ -1,7 +1,7 @@
-package kr.co.udid.ciderpay.model;
+package kr.co.udid.ciderpay.model.payment;
 
-import kr.co.udid.ciderpay.model.enums.PaymentState;
-import kr.co.udid.ciderpay.model.enums.SmsUse;
+import kr.co.udid.ciderpay.model.payment.enums.SmsUse;
+import kr.co.udid.ciderpay.model.payment.enums.PaymentState;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,11 +13,10 @@ import javax.validation.constraints.Min;
 @Getter
 @Setter
 @Entity
-@Table(name="payment")
-public class Payment {
+@Table(name="payment_request")
+public class PaymentRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false) private Long id;
 
     @Column(name = "member_id", nullable = false) private String memberID;
@@ -57,21 +56,17 @@ public class Payment {
 
     @Column(name = "create_date") private String createDate;
 
+    @Column(name = "pay_url") private String payUrl;
+
     @Column(name = "payment_state") private PaymentState paymentState;
 
     @Column(name = "pay_unique_no") private String payUniqueNo;
 
     @Column(name = "status_code") private int statusCode;
 
-    @Column(name = "order_no") private String orderNo;
-
-    @Column(name = "token") private String token;
-
-    @Column(name = "cancel_message") private String cancelMessage;
-
     @Column(name = "feedback_token") private String feedbackToken;
 
-    @Column(name = "approval_no") private String approvalNo;
+    @Column(name = "order_no") private String orderNo;
 
-    @Column(name = "bank_in_name") private String bankInName;
+    @Column(name = "approval_no") private String approvalNo;
 }

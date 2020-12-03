@@ -1,8 +1,8 @@
 package kr.co.udid.ciderpay.service;
 
-import kr.co.udid.ciderpay.model.exception.NoDataException;
-import kr.co.udid.ciderpay.model.PaymentRequest;
-import kr.co.udid.ciderpay.model.exception.ProcessStatusException;
+import kr.co.udid.ciderpay.model.common.exception.NoDataException;
+import kr.co.udid.ciderpay.model.payment.PaymentRequest;
+import kr.co.udid.ciderpay.model.common.exception.ProcessStatusException;
 import kr.co.udid.ciderpay.service.common.JpaService;
 import org.springframework.dao.DataIntegrityViolationException;
 

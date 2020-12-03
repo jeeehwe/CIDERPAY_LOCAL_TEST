@@ -1,13 +1,14 @@
 package kr.co.udid.ciderpay.controller;
 
-import kr.co.udid.ciderpay.model.data.MemberRegisterData;
-import kr.co.udid.ciderpay.model.exception.ExistDataException;
-import kr.co.udid.ciderpay.model.exception.NoDataException;
-import kr.co.udid.ciderpay.model.exception.NotSetRequiredDataException;
-import kr.co.udid.ciderpay.model.result.CommonResult;
-import kr.co.udid.ciderpay.model.result.ExistResult;
-import kr.co.udid.ciderpay.model.result.FailMessage;
-import kr.co.udid.ciderpay.model.result.member.MemberResult;
+import kr.co.udid.ciderpay.model.common.ErrorCode;
+import kr.co.udid.ciderpay.model.member.data.MemberRegisterData;
+import kr.co.udid.ciderpay.model.common.exception.ExistDataException;
+import kr.co.udid.ciderpay.model.common.exception.NoDataException;
+import kr.co.udid.ciderpay.model.common.exception.NotSetRequiredDataException;
+import kr.co.udid.ciderpay.model.common.result.CommonResult;
+import kr.co.udid.ciderpay.model.member.result.ExistResult;
+import kr.co.udid.ciderpay.model.common.result.FailMessage;
+import kr.co.udid.ciderpay.model.member.result.MemberResult;
 import kr.co.udid.ciderpay.service.MemberSv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -52,13 +53,13 @@ public class MemberApiCt
 
             result.setResult (new MemberResult (memberID));
         }
-        catch (NotSetRequiredDataException | ExistDataException e)
+        catch (NotSetRequiredDataException | NoDataException e)
         {
             result.setResult (new FailMessage ("", e.getMessage ()));
         }
-        catch (NoDataException e)
+        catch (ExistDataException e)
         {
-            result.setResult (new FailMessage ("1090", e.getMessage ()));
+            result.setResult (new FailMessage (ErrorCode.ERRROR_REGIST_MEMBER.getErrorCode (), ErrorCode.ERRROR_REGIST_MEMBER.name ()));
         }
 
         return result.getResult ();

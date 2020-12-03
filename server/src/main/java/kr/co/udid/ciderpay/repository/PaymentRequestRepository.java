@@ -1,6 +1,6 @@
 package kr.co.udid.ciderpay.repository;
 
-import kr.co.udid.ciderpay.model.PaymentRequest;
+import kr.co.udid.ciderpay.model.payment.PaymentRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface PaymentRequestRepository extends JpaRepository<PaymentRequest, Long> {

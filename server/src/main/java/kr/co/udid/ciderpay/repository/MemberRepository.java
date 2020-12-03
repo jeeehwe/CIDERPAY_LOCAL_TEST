@@ -1,6 +1,6 @@
 package kr.co.udid.ciderpay.repository;
 
-import kr.co.udid.ciderpay.model.Member;
+import kr.co.udid.ciderpay.model.member.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MemberRepository extends JpaRepository<Member, Long>

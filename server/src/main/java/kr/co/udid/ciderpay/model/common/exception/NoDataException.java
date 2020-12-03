@@ -1,4 +1,4 @@
-package kr.co.udid.ciderpay.model.exception;
+package kr.co.udid.ciderpay.model.common.exception;
 
 public class NoDataException extends Exception
 {

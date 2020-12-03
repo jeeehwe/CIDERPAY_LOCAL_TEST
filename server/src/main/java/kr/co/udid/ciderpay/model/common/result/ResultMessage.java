@@ -1,4 +1,4 @@
-package kr.co.udid.ciderpay.model.result;
+package kr.co.udid.ciderpay.model.common.result;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

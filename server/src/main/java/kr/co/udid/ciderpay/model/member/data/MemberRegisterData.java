@@ -1,6 +1,6 @@
-package kr.co.udid.ciderpay.model.data;
+package kr.co.udid.ciderpay.model.member.data;
 
-import kr.co.udid.ciderpay.model.enums.SellerType;
+import kr.co.udid.ciderpay.model.member.enums.SellerType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
