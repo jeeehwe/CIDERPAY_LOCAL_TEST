@@ -83,7 +83,7 @@ public class PaymentRequestSvImpl implements PaymentRequestSv
     {
         String feedbackUrl = request.getFeedbackurl();
 
-        if (!util.isEmptyStr(feedbackUrl))
+        if (!Util.isEmptyStr(feedbackUrl))
         {
             if (!feedbackUrl.startsWith("http://") && !feedbackUrl.startsWith("https://"))
                 feedbackUrl = "http://" + feedbackUrl;

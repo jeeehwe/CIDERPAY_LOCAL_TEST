@@ -37,7 +37,7 @@ public class Util {
         return makeShuffle.get(0);
     }
 
-    public boolean isEmptyStr (String str)
+    public static boolean isEmptyStr (String str)
     {
         if (str == null)
             return true;
@@ -50,5 +50,4 @@ public class Util {
 
         return false;
     }
-
 }

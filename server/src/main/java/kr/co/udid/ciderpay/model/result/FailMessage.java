@@ -1,9 +1,13 @@
 package kr.co.udid.ciderpay.model.result;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 public class FailMessage {
 

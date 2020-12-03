@@ -1,11 +1,13 @@
 package kr.co.udid.ciderpay.model.result.payment;
 
-import kr.co.udid.ciderpay.model.PaymentRequest;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-import javax.persistence.*;
 
-@Data
+@Getter
+@Setter
+@ToString
 public class PaymentRequestSuccess {
 
     /*성공 여부*/
