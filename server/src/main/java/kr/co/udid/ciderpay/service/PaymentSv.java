@@ -3,7 +3,7 @@ package kr.co.udid.ciderpay.service;
 import kr.co.udid.ciderpay.model.payment.Payment;
 import kr.co.udid.ciderpay.model.common.exception.NoDataException;
 import kr.co.udid.ciderpay.model.common.exception.ProcessStatusException;
-import kr.co.udid.ciderpay.service.common.JpaService;
+import kr.co.udid.ciderpay.service.util.JpaService;
 
 public interface PaymentSv extends JpaService<Payment>
 {

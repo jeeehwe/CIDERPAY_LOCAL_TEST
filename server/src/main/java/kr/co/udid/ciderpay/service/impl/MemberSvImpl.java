@@ -3,6 +3,7 @@ package kr.co.udid.ciderpay.service.impl;
 import kr.co.udid.ciderpay.model.member.Member;
 import kr.co.udid.ciderpay.model.member.data.MemberRegisterData;
 import kr.co.udid.ciderpay.model.member.enums.BizKind;
+import kr.co.udid.ciderpay.model.member.enums.CorpType;
 import kr.co.udid.ciderpay.model.member.enums.UserType;
 import kr.co.udid.ciderpay.model.common.exception.ExistDataException;
 import kr.co.udid.ciderpay.model.common.exception.NoDataException;
@@ -11,7 +12,7 @@ import kr.co.udid.ciderpay.model.member.UserTypeCompany;
 import kr.co.udid.ciderpay.model.member.UserTypePersonal;
 import kr.co.udid.ciderpay.repository.MemberRepository;
 import kr.co.udid.ciderpay.service.MemberSv;
-import kr.co.udid.ciderpay.service.common.Util;
+import kr.co.udid.ciderpay.service.util.Validation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -77,7 +78,12 @@ public class MemberSvImpl implements MemberSv
         else {
             UserTypeCompany type = new UserTypeCompany ().setCompregno (data.getCompregno ())
                     .setCompname (data.getCompname ()).setBiztype1 (data.getBiztype1 ()).setBiztype2 (data.getBiztype2 ())
-                    .setComptel (data.getComptel ()).setCeo_nm (data.getCeo_nm ()).setCorp_type (data.getCorp_type ());
+                    .setComptel (data.getComptel ()).setCeo_nm (data.getCeo_nm ());
+            if ("1".equals (data.getCorp_type ()))
+                type.setCorp_type (CorpType.PERSONAL);
+            else
+                type.setCorp_type (CorpType.CORPERATE);
+
             member.setCompanyType (type);
         }
 
@@ -88,23 +94,23 @@ public class MemberSvImpl implements MemberSv
     {
         // usertype -> 개인일 때
         if (data.getUsertype ().equals ("1")) {
-            if (Util.isEmptyStr (data.getUsername ()))
+            if (Validation.isEmptyStr (data.getUsername ()))
                 return false;
         }
         // usertype -> 사업자일 때
         else if (data.getUsertype ().equals ("2"))
         {
-            if (Util.isEmptyStr (data.getCompregno ()))
+            if (Validation.isEmptyStr (data.getCompregno ()))
                 return false;
-            if (Util.isEmptyStr (data.getCompname ()))
+            if (Validation.isEmptyStr (data.getCompname ()))
                 return false;
-            if (Util.isEmptyStr (data.getBiztype1 ()))
+            if (Validation.isEmptyStr (data.getBiztype1 ()))
                 return false;
-            if (Util.isEmptyStr (data.getBiztype2 ()))
+            if (Validation.isEmptyStr (data.getBiztype2 ()))
                 return false;
-            if (Util.isEmptyStr (data.getComptel ()))
+            if (Validation.isEmptyStr (data.getComptel ()))
                 return false;
-            if (Util.isEmptyStr (data.getCeo_nm ()))
+            if (Validation.isEmptyStr (data.getCeo_nm ()))
                 return false;
         }
         // usertype 이 잘못되었을 때

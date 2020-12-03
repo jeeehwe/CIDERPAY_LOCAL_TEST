@@ -8,7 +8,8 @@ import kr.co.udid.ciderpay.repository.PaymentRepository;
 import kr.co.udid.ciderpay.repository.PaymentRequestRepository;
 import kr.co.udid.ciderpay.model.payment.PaymentRequest;
 import kr.co.udid.ciderpay.service.PaymentRequestSv;
-import kr.co.udid.ciderpay.service.common.Util;
+import kr.co.udid.ciderpay.service.util.MakeRandom;
+import kr.co.udid.ciderpay.service.util.Validation;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -34,16 +35,16 @@ public class PaymentRequestSvImpl implements PaymentRequestSv
 {
     final private PaymentRequestRepository requestRepository;
     final private PaymentRepository paymentRepository;
-    final private Util util;
+    final private MakeRandom makeRandom;
 
     @Override
     public PaymentRequest insertTestData(PaymentRequest request)
     {
         request.setCreateDate(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
 
-        request.setPayUrl(util.makeRandomStr());
+        request.setPayUrl(makeRandom.makeRandomStr());
         request.setPaymentState(PaymentState.REQUEST);
-        request.setPayUniqueNo(util.makeRandomStr() + util.makeRandomStr());
+        request.setPayUniqueNo(makeRandom.makeRandomStr() + makeRandom.makeRandomStr());
         request.setFeedbackurl("http://localhost:8080");
         request.setReturnurl("/");
 
@@ -83,7 +84,7 @@ public class PaymentRequestSvImpl implements PaymentRequestSv
     {
         String feedbackUrl = request.getFeedbackurl();
 
-        if (!Util.isEmptyStr(feedbackUrl))
+        if (!Validation.isEmptyStr(feedbackUrl))
         {
             if (!feedbackUrl.startsWith("http://") && !feedbackUrl.startsWith("https://"))
                 feedbackUrl = "http://" + feedbackUrl;
@@ -97,8 +98,8 @@ public class PaymentRequestSvImpl implements PaymentRequestSv
 
             String feedbackToken = "feedbackToken";
             String token = "token";
-            String orderNo = util.makeRandomNum();
-            String approvalNo = util.makeRandomNum();
+            String orderNo = makeRandom.makeRandomNum();
+            String approvalNo = makeRandom.makeRandomNum();
 
             Payment payment = new Payment();
             BeanUtils.copyProperties(request, payment);
@@ -123,7 +124,7 @@ public class PaymentRequestSvImpl implements PaymentRequestSv
             urlParameters.add(new BasicNameValuePair("var2", request.getVar2()));
             urlParameters.add(new BasicNameValuePair("card_num", "1234-****-****-1234"));
             urlParameters.add(new BasicNameValuePair("card_quota", "3")); //할부 개월
-            urlParameters.add(new BasicNameValuePair("csturl", util.makeRandomStr())); //영수증 url
+            urlParameters.add(new BasicNameValuePair("csturl", makeRandom.makeRandomStr())); //영수증 url
 
             post.setEntity(new UrlEncodedFormEntity(urlParameters, StandardCharsets.UTF_8));
 

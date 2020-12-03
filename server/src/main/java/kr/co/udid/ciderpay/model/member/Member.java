@@ -3,7 +3,7 @@ package kr.co.udid.ciderpay.model.member;
 import kr.co.udid.ciderpay.model.member.enums.BizKind;
 import kr.co.udid.ciderpay.model.member.enums.SellerType;
 import kr.co.udid.ciderpay.model.member.enums.UserType;
-import kr.co.udid.ciderpay.service.common.EnumConverter;
+import kr.co.udid.ciderpay.service.util.EnumConverter;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

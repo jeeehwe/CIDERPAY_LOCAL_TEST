@@ -13,6 +13,8 @@ import kr.co.udid.ciderpay.service.MemberSv;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*", allowedHeaders = "*")
@@ -30,7 +32,7 @@ public class MemberApiCt
         {
             boolean exist = memberSv.existMemberID (memberID, parentMemberID);
 
-            result.setExist (exist? "Y" : "N");
+            result.setExist (exist ? "Y" : "N");
         }
         catch (NoDataException e)
         {
@@ -43,7 +45,7 @@ public class MemberApiCt
     }
 
     @PostMapping("/regist/seller/v2")
-    public Object regist (MemberRegisterData data) throws IllegalArgumentException
+    public Object regist (@Valid MemberRegisterData data) throws IllegalArgumentException
     {
         CommonResult result = new CommonResult ();
 

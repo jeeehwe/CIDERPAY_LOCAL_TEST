@@ -1,7 +1,6 @@
-package kr.co.udid.ciderpay.service.common;
+package kr.co.udid.ciderpay.service.util;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class EnumConverter
 {

@@ -1,4 +1,4 @@
-package kr.co.udid.ciderpay.service.common;
+package kr.co.udid.ciderpay.service.util;
 
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,8 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @Component
-public class Util {
+public class MakeRandom
+{
     public String makeRandomStr() {
         return IntStream.range (0, 6).mapToObj ((f) -> makeShuffleStr()).collect(Collectors.joining(""));
     }
@@ -37,17 +38,4 @@ public class Util {
         return makeShuffle.get(0);
     }
 
-    public static boolean isEmptyStr (String str)
-    {
-        if (str == null)
-            return true;
-
-        if (str.equals (""))
-            return true;
-
-        if (str.equals ("null"))
-            return true;
-
-        return false;
-    }
 }
