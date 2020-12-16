@@ -12,7 +12,7 @@ import kr.co.udid.ciderpay.model.member.UserTypeCompany;
 import kr.co.udid.ciderpay.model.member.UserTypePersonal;
 import kr.co.udid.ciderpay.repository.MemberRepository;
 import kr.co.udid.ciderpay.service.MemberSv;
-import kr.co.udid.ciderpay.service.util.Validation;
+import kr.co.udid.ciderpay.service.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
@@ -62,7 +62,7 @@ public class MemberSvImpl implements MemberSv
     private Member registMemberCore (MemberRegisterData data) throws NoDataException
     {
         Member member = new Member ();
-        BeanUtils.copyProperties (data, member);
+        Util.myCopyProperties (data, member);
 
         member.setParentMemberID (data.getResellerid ());
         setBizKind (member, data.getBizkind ());
@@ -94,23 +94,23 @@ public class MemberSvImpl implements MemberSv
     {
         // usertype -> 개인일 때
         if (data.getUsertype ().equals ("1")) {
-            if (Validation.isEmptyStr (data.getUsername ()))
+            if (Util.isEmptyStr (data.getUsername ()))
                 return false;
         }
         // usertype -> 사업자일 때
         else if (data.getUsertype ().equals ("2"))
         {
-            if (Validation.isEmptyStr (data.getCompregno ()))
+            if (Util.isEmptyStr (data.getCompregno ()))
                 return false;
-            if (Validation.isEmptyStr (data.getCompname ()))
+            if (Util.isEmptyStr (data.getCompname ()))
                 return false;
-            if (Validation.isEmptyStr (data.getBiztype1 ()))
+            if (Util.isEmptyStr (data.getBiztype1 ()))
                 return false;
-            if (Validation.isEmptyStr (data.getBiztype2 ()))
+            if (Util.isEmptyStr (data.getBiztype2 ()))
                 return false;
-            if (Validation.isEmptyStr (data.getComptel ()))
+            if (Util.isEmptyStr (data.getComptel ()))
                 return false;
-            if (Validation.isEmptyStr (data.getCeo_nm ()))
+            if (Util.isEmptyStr (data.getCeo_nm ()))
                 return false;
         }
         // usertype 이 잘못되었을 때
