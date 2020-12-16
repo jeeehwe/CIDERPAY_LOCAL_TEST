@@ -11,7 +11,7 @@ import kr.co.udid.ciderpay.repository.PaymentRequestRepository;
 import kr.co.udid.ciderpay.model.payment.PaymentRequest;
 import kr.co.udid.ciderpay.service.PaymentRequestSv;
 import kr.co.udid.ciderpay.service.util.MakeRandom;
-import kr.co.udid.ciderpay.service.util.Validation;
+import kr.co.udid.ciderpay.service.util.Util;
 import lombok.RequiredArgsConstructor;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
@@ -52,7 +52,7 @@ public class PaymentRequestSvImpl implements PaymentRequestSv
         request.setPayUniqueNo (makeRandom.makeRandomStr () + makeRandom.makeRandomStr ());
         request.setFeedbackurl ("http://localhost:8080");
         request.setReturnurl ("/");
-        if (!Validation.isEmptyStr (data.getReturnmode ()))
+        if (!Util.isEmptyStr (data.getReturnmode ()))
             request.setReturnmode (ReturnMode.JUST);
 
         PaymentRequest result = requestRepository.save (request);
@@ -92,7 +92,7 @@ public class PaymentRequestSvImpl implements PaymentRequestSv
     {
         String feedbackUrl = request.getFeedbackurl ();
 
-        if (!Validation.isEmptyStr (feedbackUrl)) {
+        if (!Util.isEmptyStr (feedbackUrl)) {
             if (!feedbackUrl.startsWith ("http://") && !feedbackUrl.startsWith ("https://"))
                 feedbackUrl = "http://" + feedbackUrl;
 

@@ -7,7 +7,10 @@
 # 실행법
 
 ```hash
-$ cd client
+$ cd server
+$ gradlew bootRun
+
+$ cd ../client
 $ yarn install
 $ yarn serve
 ```
