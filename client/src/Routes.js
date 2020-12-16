@@ -8,7 +8,7 @@ Vue.use(Router);
 export default new Router({
     mode: 'history',
     routes: [
-        { path: '/', component: Index.Home },
+        { path: '/', redirect: '/list/request' },
         { path: '/p/:payUrl', component: Index.PayUrl },
         { path: '/list/:state', component: Index.PaymentList },
     ],
